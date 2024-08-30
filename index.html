@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="htatps://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -14,7 +14,6 @@
         <h1 class="text-center">🍔 Mis Recetas APP 🍔</h1>
         
         <div id="alert-container" class="hidden"></div>
-        
 
         <form id="recipe-form" class="mt-4">
             <div class="row">
@@ -24,13 +23,13 @@
                 </div>
                 <div class="col-md-6">
                     <label for="ingredients">Ingredientes:</label>
-                    <textarea name="ingredients" id="ingredients" required></textarea>
+                    <textarea name="ingredients" id="ingredients" class="form-control" required></textarea>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-md-4">
                     <label for="instructions">Instrucciones:</label>
-                    <textarea name="instructions" id="instructions" required></textarea>
+                    <textarea name="instructions" id="instructions" class="form-control" required></textarea>
                 </div>
                 <div class="col-md-4">
                     <label for="category">Categoría:</label>
@@ -43,17 +42,14 @@
                         <option value="postre">Postre</option>
                     </select>
                 </div>
-
                 <div class="col-md-4">
                     <label for="portions">Número de Porciones:</label>
-                    <input type="number" id="portions" min="1" required>
+                    <input type="number" id="portions" class="form-control" min="1" required>
                 </div>
-
                 <div class="col-md-4">
                     <label for="cooking-time">Tiempo de Cocción (minutos):</label>
-                    <input type="number" id="cooking-time" min="1" required>
+                    <input type="number" id="cooking-time" class="form-control" min="1" required>
                 </div>
-
                 <div class="col-md-4">
                     <label for="difficulty-level">Nivel de Dificultad:</label>
                     <select id="difficulty-level" class="form-control">
@@ -84,7 +80,7 @@
             </div>
             <div class="col-md-2">
                 <select id="filter-difficulty-level" class="form-control">
-                    <option value="">Nivel de Dificultad:</option>
+                    <option value="">Nivel de Dificultad</option>
                     <option value="facil">Fácil</option>
                     <option value="medio">Medio</option>
                     <option value="dificil">Difícil</option>
@@ -103,10 +99,11 @@
                     <th>Número de Porciones</th>
                     <th>Tiempo de Cocción (minutos)</th>
                     <th>Nivel de Dificultad</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="recipe-list">
-                
+                <!-- Aquí se llenará con las recetas almacenadas -->
             </tbody>
         </table>
     </div>
