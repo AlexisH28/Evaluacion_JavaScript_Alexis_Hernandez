@@ -1,4 +1,4 @@
-# EYE CONTACT 🍿
+# Mis Recetas App 
 
 ## Tabla de Contenido 📋
 | Indice | Título  |
