@@ -1,10 +1,10 @@
 // Manejo de recursos en LocalStorage
-function obtenerRecursos() {
-    return JSON.parse(localStorage.getItem('recursos')) || [];
+function obtenerRecetas() {
+    return JSON.parse(localStorage.getItem('recetas')) || [];
 }
 
-function guardarRecursos(recursos) {
-    localStorage.setItem('recursos', JSON.stringify(recursos));
+function guardarRecetas(recetas) {
+    localStorage.setItem('recetas', JSON.stringify(recetas));
 }
 
 // Función para mostrar mensajes de alerta
@@ -17,187 +17,148 @@ function mostrarAlerta(mensaje, tipo = 'success') {
     }, 3000);
 }
 
-// Función para manejar la selección de estrellas
-function manejarEstrellas() {
-    const estrellas = document.querySelectorAll('#rating-container i');
-    estrellas.forEach(estrella => {
-        estrella.addEventListener('click', (event) => {
-            const rating = event.target.getAttribute('data-value');
-            document.getElementById('rating').value = rating;
-            actualizarEstrellas(rating);
-        });
-    });
-}
-
-function actualizarEstrellas(rating) {
-    const estrellas = document.querySelectorAll('#rating-container i');
-    estrellas.forEach(estrella => {
-        estrella.classList.toggle('text-yellow-500', estrella.getAttribute('data-value') <= rating);
-    });
-}
-
-function validarFormulario(nombre, genero, plataforma, estado, formato, fecha, valoracion) {
-    if (!nombre || !genero || !plataforma || !formato || !estado) {
-        mostrarAlerta('Todos los campos obligatorios deben ser completados', 'error');
+//Función para validar correctamente el formulario
+function validarFormulario(nombre, ingredientes, instrucciones, categoria, porciones, tiempo, dificultad) {
+    if (!nombre || !ingredientes || !instrucciones || !categoria || !porciones || !tiempo || !dificultad) {
+        mostrarAlerta('Todos los campos deben ser completados', 'error');
         return false;
     }
 
-    // Validar la fecha solo si el estado es "Terminado"
-    if (estado === 'Terminado') {
-        if (!fecha) {
-            mostrarAlerta('La fecha de terminación es obligatoria cuando el estado es Terminado', 'error');
-            return false;
-        }
-
-        if (new Date(fecha) > new Date()) {
-            mostrarAlerta('La fecha de terminación no puede ser en el futuro', 'error');
-            return false;
-        }
-    }
-
-    if ((estado === 'En progreso' || estado === 'Pendiente') && fecha) {
-        mostrarAlerta('La fecha no debe ser completada cuando el estado es En progreso o Pendiente', 'error');
+    if (ingredientes.split(',').length < 3) {
+        mostrarAlerta('Deben haber al menos 3 ingredientes', 'error');
         return false;
     }
 
-    // Validar que la valoración esté entre 1 y 5
-    if (valoracion < 1 || valoracion > 5) {
-        mostrarAlerta('La valoración debe estar entre 1 y 5 estrellas', 'error');
+    if (instrucciones.split('.').length < 5) {
+        mostrarAlerta('Deben haber al menos 5 instrucciones', 'error');
         return false;
     }
 
+    if (!Number.isInteger(porciones) || porciones <= 0) {
+        mostrarAlerta('La cantidad de porciones debe ser un número entero positivo', 'error');
+        return false;
+    }
+
+    if (!Number.isInteger(tiempo) || tiempo <= 0) {
+        mostrarAlerta('El tiempo de preparación debe ser un número entero positivo', 'error');
+        return false;
+    }
+
+    if (!['Fácil', 'Medio', 'Difícil'].includes(dificultad)) {
+        mostrarAlerta('La dificultad debe ser Fácil, Medio o Difícil', 'error');
+        return false;
+    }
     return true;
 }
 
-// Función para habilitar o deshabilitar el campo de fecha según el estado
-function manejarEstadoCambio() {
-    const estado = document.getElementById('status').value;
-    const fechaInput = document.getElementById('completion-date');
-    
-    if (estado === 'En progreso' || estado === 'Pendiente' ) {
-        fechaInput.disabled = true; 
-        fechaInput.value = '';      
-    } else {
-        fechaInput.disabled = false; 
-    }
-
-}
-
-document.getElementById('status').addEventListener('change', manejarEstadoCambio);
+document.getElementById('category').addEventListener('change', manejarEstadoCambio);
 
 
 document.addEventListener('DOMContentLoaded', manejarEstadoCambio);
 
-// Función para mostrar la lista de recursos
-function mostrarRecursos() {
-    const recursos = obtenerRecursos();
-    const lista = document.getElementById('resource-list');
+// Función para mostrar la lista de recetas
+function mostrarRecetas() {
+    const recetas = obtenerRecetas();
+    const lista = document.getElementById('recipe-list');
     lista.innerHTML = '';
 
-    recursos.forEach((recurso, index) => {
+    recetas.forEach((receta, index) => {
         const fila = document.createElement('tr');
         fila.innerHTML = `
-            <td>${recurso.nombre}</td>
-            <td>${recurso.genero}</td>
-            <td>${recurso.plataforma.join(', ')}</td>
-            <td>${recurso.estado.join(', ')}</td>
-            <td>${recurso.formato.join(', ')}</td>
-            <td>${recurso.fecha}</td>
-            <td>${'⭐'.repeat(recurso.valoracion)}</td>
-            <td>${recurso.resena}</td>
+            <td>${receta.nombre}</td>
+            <td>${receta.ingredientes}</td>
+            <td>${receta.instrucciones}</td>
+            <td>${receta.categoria}</td>
+            <td>${receta.porciones}</td>
+            <td>${receta.tiempo}</td>
+            <td>${receta.dificultad}</td>
             <td>
-                <button class="btn btn-sm btn-warning" onclick="editarRecurso(${index})">Editar</button>
-                <button class="btn btn-sm btn-danger" onclick="eliminarRecurso(${index})">Eliminar</button>
+                <button class="btn btn-sm btn-warning" onclick="editarReceta(${index})">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="eliminarReceta(${index})">Eliminar</button>
             </td>
         `;
         lista.appendChild(fila);
     });
 }
 
-// Función para añadir o actualizar un recurso
-document.getElementById('resource-form').addEventListener('submit', function(event) {
+// Función para añadir o actualizar una receta
+document.getElementById('recipe-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const nombre = document.getElementById('resource-name').value;
-    const genero = document.getElementById('genre').value;
-    const plataforma = Array.from(document.getElementById('platform').selectedOptions).map(option => option.value);
-    const estado = Array.from(document.getElementById('status').selectedOptions).map(option => option.value);
-    const formato = Array.from(document.getElementById('format').selectedOptions).map(option => option.value);
-    const fecha = document.getElementById('completion-date').value;
-    const valoracion = document.getElementById('rating').value;
-    const resena = document.getElementById('review').value;
+    const nombre = document.getElementById('recipe-name').value;
+    const ingredientes = document.getElementById('ingredients').value;
+    const instrucciones = Array.from(document.getElementById('instructions').selectedOptions).map(option => option.value);
+    const categoria = Array.from(document.getElementById('category').selectedOptions).map(option => option.value);
+    const porciones = Array.from(document.getElementById('portions').selectedOptions).map(option => option.value);
+    const tiempo = document.getElementById('cooking-time').value;
+    const dificultad = document.getElementById('difficulty-level').value;
 
-    if (!validarFormulario(nombre, genero, plataforma, estado, formato, fecha, valoracion)) return;
+    if (!validarFormulario(nombre, ingredientes, instrucciones, categoria, porciones, tiempo, dificultad)) return;
 
-    const recursos = obtenerRecursos();
-    const recurso = { nombre, genero, plataforma, estado, formato, fecha, valoracion, resena };
+    const recetas = obtenerRecetas();
+    const receta = { nombre, ingredientes, instrucciones, categoria, porciones, tiempo, dificultad};
 
-    recursos.push(recurso);
-    guardarRecursos(recursos);
-    mostrarAlerta('Recurso añadido exitosamente');
-    mostrarRecursos();
+    recetas.push(receta);
+    guardarRecetas(recetas);
+    mostrarAlerta('Receta añadida exitosamente');
+    mostrarRecetas();
     this.reset();
-    actualizarEstrellas(0); // Resetear las estrellas visuales
 });
 
-// Función para editar un recurso
-function editarRecurso(index) {
-    const recursos = obtenerRecursos();
-    const recurso = recursos[index];
+// Función para editar una receta
+function editarReceta(index) {
+    const recetas = obtenerRecursos();
+    const receta = recetas[index];
 
-    document.getElementById('resource-name').value = recurso.nombre;
-    document.getElementById('genre').value = recurso.genero;
-    document.getElementById('platform').value = recurso.plataforma;
-    document.getElementById('status').value = recurso.estado;
-    document.getElementById('format').value = recurso.formato;
-    document.getElementById('completion-date').value = recurso.fecha;
-    document.getElementById('rating').value = recurso.valoracion;
-    document.getElementById('review').value = recurso.resena;
+    document.getElementById('recipe-name').value = receta.nombre;
+    document.getElementById('ingredients').value = receta.ingredientes;
+    document.getElementById('instructions').value = receta.instrucciones;
+    document.getElementById('category').value = receta.categoria;
+    document.getElementById('portions').value = receta.porciones;
+    document.getElementById('cooking-time').value = receta.tiempo;
+    document.getElementById('difficulty-level').value = receta.dificultad;
 
-    eliminarRecurso(index); // Eliminar recurso para actualizarlo}
-    mostrarAlerta('Recurso actualizado exitosamente');
+    eliminarReceta(index);
+    mostrarAlerta('Receta actualizada exitosamente');
 }
 
-// Función para eliminar un recurso
-function eliminarRecurso(index) {
-    const recursos = obtenerRecursos();
-    recursos.splice(index, 1);
-    guardarRecursos(recursos);
-    mostrarRecursos();
-    mostrarAlerta('Recurso eliminado exitosamente');
+// Función para eliminar una receta
+function eliminarReceta(index) {
+    const recetas = obtenerRecetas();
+    recetas.splice(index, 1);
+    guardarRecursos(recetas);
+    mostrarRecetas();
+    mostrarAlerta('Receta eliminada exitosamente');
 }
 
 // Función para filtrar recursos
-function filtrarRecursos() {
+function filtrarReceta() {
     const nombreFiltro = document.getElementById('search-bar').value.toLowerCase();
-    const estadoFiltro = document.getElementById('filter-status').value;
-    const formatoFiltro = document.getElementById('filter-format').value;
-    const plataformaFiltro = document.getElementById('filter-platform').value;
-
-    const recursos = obtenerRecursos();
-    const lista = document.getElementById('resource-list');
+    const categoriaFiltro = document.getElementById('filter-category').value;
+    const dificultadFiltro = document.getElementById('filter-difficulty-level').value;
+    
+    const recetas = obtenerRecetas();
+    const lista = document.getElementById('recipe-list');
     lista.innerHTML = '';
 
-    recursos.forEach((recurso, index) => {
+    recetas.forEach((receta, index) => {
         if (
-            (nombreFiltro === '' || recurso.nombre.toLowerCase().includes(nombreFiltro)) &&
-            (estadoFiltro === '' || recurso.estado.includes(estadoFiltro)) &&
-            (formatoFiltro === '' || recurso.formato.includes(formatoFiltro)) &&
-            (plataformaFiltro === '' || recurso.plataforma.includes(plataformaFiltro))
-        ) {
+            (nombreFiltro === '' || receta.nombre.toLowerCase().includes(nombreFiltro)) &&
+            (categoriaFiltro === '' || receta.categoria.includes(categoriaFiltro)) &&
+            (dificultadFiltroFiltro === '' || receta.dificultad.includes(dificultadFiltro)) &&
+        ){
             const fila = document.createElement('tr');
             fila.innerHTML = `
-                <td>${recurso.nombre}</td>
-                <td>${recurso.genero}</td>
-                <td>${recurso.plataforma.join(', ')}</td>
-                <td>${recurso.estado.join(', ')}</td>
-                <td>${recurso.formato.join(', ')}</td>
-                <td>${recurso.fecha}</td>
-                <td>${'⭐'.repeat(recurso.valoracion)}</td>
-                <td>${recurso.resena}</td>
+                <td>${receta.nombre}</td>
+                <td>${receta.ingredientes}</td>
+                <td>${receta.instrucciones}</td>
+                <td>${receta.categoria}</td>
+                <td>${receta.porciones}</td>
+                <td>${receta.tiempo}</td>
+                <td>${receta.dificultad}</td>
                 <td>
-                    <button class="btn btn-info btn-sm" onclick="editarRecurso(${index})">Editar</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarRecurso(${index})">Eliminar</button>
+                    <button class="btn btn-info btn-sm" onclick="editarReceta(${index})">Editar</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarReceta(${index})">Eliminar</button>
                 </td>
             `;
             lista.appendChild(fila);
@@ -206,10 +167,10 @@ function filtrarRecursos() {
 }
 
 
-document.getElementById('search-bar').addEventListener('input', filtrarRecursos);
-document.getElementById('filter-status').addEventListener('change', filtrarRecursos);
-document.getElementById('filter-format').addEventListener('change', filtrarRecursos);
-document.getElementById('filter-platform').addEventListener('change', filtrarRecursos);
+document.getElementById('search-bar').addEventListener('input', filtrarRecetas);
+document.getElementById('filter-status').addEventListener('change', filtrarRecetas);
+document.getElementById('filter-format').addEventListener('change', filtrarRecetas);
+document.getElementById('filter-platform').addEventListener('change', filtrarRecetas);
 
 
 
@@ -217,5 +178,4 @@ document.getElementById('filter-platform').addEventListener('change', filtrarRec
 // Inicialización de la lista y manejo de estrellas
 document.addEventListener('DOMContentLoaded', () => {
     mostrarRecursos();
-    manejarEstrellas();
 });

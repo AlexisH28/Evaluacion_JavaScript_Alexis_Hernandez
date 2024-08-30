@@ -16,7 +16,7 @@
         <div id="alert-container" class="hidden"></div>
         
         <!--Formulario Recetas-->
-        
+
         <form id="recipe-form" class="mt-4">
             <div class="row">
                 <div class="col-md-6">
@@ -24,130 +24,96 @@
                     <input type="text" id="recipe-name" class="form-control" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="genre">Género:</label>
-                    <select id="genre" class="form-control">
-                        <option value="Acción">Acción</option>
-                        <option value="Aventura">Aventura</option>
-                        <option value="Ciencia-Ficción">Ciencia-Ficción</option>
-                        <option value="Comedia">Comedia</option>
-                        <option value="Drama">Drama</option>
-                        <option value="Fantasía">Fantasía</option>
-                        <option value="Terror">Terror</option>
-                        <option value="Otro">Otro</option>
-                    </select>
+                    <label for="ingredients">Ingredientes:</label>
+                    <textarea name="ingredients" id="ingredients" required></textarea>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-md-4">
-                    <label for="platform">Plataforma:</label>
-                    <select id="platform" class="form-control">
-                        <option value="Netflix">Netflix</option>
-                        <option value="Amazon">Amazon</option>
-                        <option value="HBO">HBO</option>
-                        <option value="Kindle">Kindle</option>
-                        <option value="AppleBooks">AppleBooks</option>
-                        <option value="Wattpad">Wattpad</option>
-                        <option value="Otro">Otro</option>
-                    </select>
+                    <label for="instructions">Instrucciones:</label>
+                    <textarea name="instructions" id="instructions" required></textarea>
                 </div>
                 <div class="col-md-4">
-                    <label for="status">Estado:</label>
-                    <select id="status" class="form-control">
-                        <option value="En progreso">En progreso</option>
-                        <option value="Terminado">Terminado</option>
-                        <option value="Pendiente">Pendiente</option>
+                    <label for="category">Categoría:</label>
+                    <select id="category" class="form-control">
+                        <option value="entrada">Entrada</option>
+                        <option value="plato-principal">Plato Principal</option>
+                        <option value="desayuno">Desayuno</option>
+                        <option value="almuerzo">Almuerzo</option>
+                        <option value="cena">Cena</option>
+                        <option value="postre">Postre</option>
                     </select>
                 </div>
+
                 <div class="col-md-4">
-                    <label for="format">Formato:</label>
-                    <select id="format" class="form-control">
-                        <option value="Serie">Serie</option>
-                        <option value="Película">Película</option>
-                        <option value="Libro">Libro</option>
+                    <label for="portions">Número de Porciones:</label>
+                    <input type="number" id="portions" min="1" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="cooking-time">Tiempo de Cocción (minutos):</label>
+                    <input type="number" id="cooking-time" min="1" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="difficulty-level">Nivel de Dificultad:</label>
+                    <select id="difficulty-level" class="form-control">
+                        <option value="facil">Fácil</option>
+                        <option value="medio">Medio</option>
+                        <option value="dificil">Difícil</option>
                     </select>
                 </div>
             </div>
-            <div class="row mt-3">
-                <div class="col-md-4">
-                    <label for="completion-date">Fecha de Terminación:</label>
-                    <input type="date" id="completion-date" class="form-control">
-                </div>
-                <div class="col-md-4">
-                    <label for="rating">Valoración Final:</label>
-                    <div id="rating-container" class="flex justify-between items-center">
-                        <!-- Generación de estrellas -->
-                        <i class="fas fa-star" data-value="1"></i>
-                        <i class="fas fa-star" data-value="2"></i>
-                        <i class="fas fa-star" data-value="3"></i>
-                        <i class="fas fa-star" data-value="4"></i>
-                        <i class="fas fa-star" data-value="5"></i>
-                    </div>
-                    <input type="hidden" id="rating" value="0">
-                </div>
-                <div class="col-md-4">
-                    <label for="review">Reseña Personal:</label>
-                    <textarea id="review" class="form-control"></textarea>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary mt-4">Guardar Recurso</button>
+
+            <button type="submit" class="btn btn-primary mt-4">Guardar Receta</button>
         </form>
 
-        <!-- Barra de búsqueda y filtros -->
         <div class="row mt-5">
             <div class="col-md-4">
-                <input type="text" id="search-bar" class="form-control" placeholder="Buscar por nombre...">
+                <input type="text" id="search-bar" class="form-control" placeholder="Buscar recetas...">
             </div>
             <div class="col-md-2">
-                <select id="filter-status" class="form-control">
-                    <option value="">Estado</option>
-                    <option value="En progreso">En progreso</option>
-                    <option value="Terminado">Terminado</option>
-                    <option value="Pendiente">Pendiente</option>
+                <select id="filter-category" class="form-control">
+                    <option value="">Categoría</option>
+                    <option value="entrada">Entrada</option>
+                    <option value="plato-principal">Plato Principal</option>
+                    <option value="desayuno">Desayuno</option>
+                    <option value="almuerzo">Almuerzo</option>
+                    <option value="cena">Cena</option>
+                    <option value="postre">Postre</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <select id="filter-format" class="form-control">
-                    <option value="">Formato</option>
-                    <option value="Serie">Serie</option>
-                    <option value="Película">Película</option>
-                    <option value="Libro">Libro</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <select id="filter-platform" class="form-control">
-                    <option value="">Plataforma</option>
-                    <option value="Netflix">Netflix</option>
-                    <option value="Amazon">Amazon</option>
-                    <option value="HBO">HBO</option>
-                    <option value="Kindle">Kindle</option>
-                    <option value="AppleBooks">AppleBooks</option>
-                    <option value="Wattpad">Wattpad</option>
-                    <option value="Otro">Otro</option>
+                <select id="filter-difficulty-level" class="form-control">
+                    <option value="">Nivel de Dificultad:</option>
+                    <option value="facil">Fácil</option>
+                    <option value="medio">Medio</option>
+                    <option value="dificil">Difícil</option>
                 </select>
             </div>
         </div>
 
-        <!-- Tabla de recursos -->
+        <!-- Tabla de recetas -->
         <table class="table table-striped mt-5">
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Género</th>
-                    <th>Plataforma</th>
-                    <th>Estado</th>
-                    <th>Formato</th>
-                    <th>Fecha de Terminación</th>
-                    <th>Valoración</th>
-                    <th>Reseña</th>
-                    <th>Acciones</th>
+                    <th>Ingredientes</th>
+                    <th>Instrucciones</th>
+                    <th>Categoría</th>
+                    <th>Número de Porciones</th>
+                    <th>Tiempo de Cocción (minutos)</th>
+                    <th>Nivel de Dificultad</th>
                 </tr>
             </thead>
-            <tbody id="resource-list">
-                <!-- Elementos dinámicos -->
+            <tbody id="recipe-list">
+                
             </tbody>
         </table>
     </div>
-
+    <footer>
+        <p>&copy; 2024 Gestión de Recetas</p>
+    </footer>
     <script src="main.js"></script>
 </body>
 </html>
