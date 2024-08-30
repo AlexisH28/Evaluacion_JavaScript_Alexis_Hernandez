@@ -145,8 +145,8 @@ function filtrarRecetas() {
         if(
             (nombreFiltro === '' || receta.nombre.toLowerCase().includes(nombreFiltro)) &&
             (categoriaFiltro === '' || receta.categoria.includes(categoriaFiltro)) &&
-            (dificultadFiltro === '' || receta.dificultad.includes(dificultadFiltro)) &&
-        ){
+            (dificultadFiltro === '' || receta.dificultad.includes(dificultadFiltro)))
+            {
             const fila = document.createElement('tr');
             fila.innerHTML = `
                 <td>${receta.nombre}</td>
