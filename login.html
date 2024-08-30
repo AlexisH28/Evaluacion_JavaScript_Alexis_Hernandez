@@ -3,9 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="https://kit.fontawesome.com/d69c1574a7.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="login.css">
+    <title>🍔 Mis Recetas APP 🍔</title>
 </head>
 <body>
-    
+    <section>
+        <div class="contenedor">
+            <div class="formulario">
+                <form action="#">
+                    <h2>Iniciar Sesión</h2>
+
+                    <div class="input-contenedor">
+                        <i class="fa-solid fa-envelope fa-bounce"></i>
+                        <input type="email" required>
+                        <label for="#">Email</label>
+                    </div>
+
+                    <div class="input-contenedor">
+                        <i class="fa-solid fa-lock fa-bounce"></i>
+                        <input type="password" required>
+                        <label for="#">Contraseña</label>
+                    </div>
+
+                    <div class="olvidar">
+                        <label for="#">
+                            <input type="checkbox"> Recordar Sesión
+                            <a href="#">¿Olvidé la Contraseña?</a>
+                        </label>
+                    </div>
+
+                    <div>
+                        <button type="submit">Acceder</button>
+                        
+                        <div class="registrar">
+                            <p>¿No tienes Cuenta? <a href="#">Registrarse</a></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script src="/login.js"></script>
 </body>
 </html>
