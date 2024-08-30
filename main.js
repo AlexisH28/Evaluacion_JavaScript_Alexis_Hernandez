@@ -142,11 +142,11 @@ function filtrarReceta() {
     lista.innerHTML = '';
 
     recetas.forEach((receta, index) => {
-        if (
+        if() (
             (nombreFiltro === '' || receta.nombre.toLowerCase().includes(nombreFiltro)) &&
             (categoriaFiltro === '' || receta.categoria.includes(categoriaFiltro)) &&
             (dificultadFiltroFiltro === '' || receta.dificultad.includes(dificultadFiltro)) &&
-        ){
+        )else{
             const fila = document.createElement('tr');
             fila.innerHTML = `
                 <td>${receta.nombre}</td>
