@@ -87,11 +87,11 @@ document.getElementById('recipe-form').addEventListener('submit', function(event
 
     const nombre = document.getElementById('recipe-name').value;
     const ingredientes = document.getElementById('ingredients').value;
-    const instrucciones = Array.from(document.getElementById('instructions').selectedOptions).map(option => option.value);
-    const categoria = Array.from(document.getElementById('category').selectedOptions).map(option => option.value);
-    const porciones = Array.from(document.getElementById('portions').selectedOptions).map(option => option.value);
+    const instrucciones = document.from(document.getElementById('instructions').selectedOptions).value;
+    const categoria = document.from(document.getElementById('category').selectedOptions).map(option => option.value);
+    const porciones = document.from(document.getElementById('portions').selectedOptions).value;
     const tiempo = document.getElementById('cooking-time').value;
-    const dificultad = document.getElementById('difficulty-level').value;
+    const dificultad = document.getElementById('difficulty-level').map(option => option.value);
 
     if (!validarFormulario(nombre, ingredientes, instrucciones, categoria, porciones, tiempo, dificultad)) return;
 
@@ -126,13 +126,13 @@ function editarReceta(index) {
 function eliminarReceta(index) {
     const recetas = obtenerRecetas();
     recetas.splice(index, 1);
-    guardarRecursos(recetas);
+    guardarRecetas(recetas);
     mostrarRecetas();
     mostrarAlerta('Receta eliminada exitosamente');
 }
 
 // Función para filtrar recursos
-function filtrarReceta() {
+function filtrarRecetas() {
     const nombreFiltro = document.getElementById('search-bar').value.toLowerCase();
     const categoriaFiltro = document.getElementById('filter-category').value;
     const dificultadFiltro = document.getElementById('filter-difficulty-level').value;
@@ -142,11 +142,11 @@ function filtrarReceta() {
     lista.innerHTML = '';
 
     recetas.forEach((receta, index) => {
-        if() (
+        if(
             (nombreFiltro === '' || receta.nombre.toLowerCase().includes(nombreFiltro)) &&
             (categoriaFiltro === '' || receta.categoria.includes(categoriaFiltro)) &&
-            (dificultadFiltroFiltro === '' || receta.dificultad.includes(dificultadFiltro)) &&
-        )else{
+            (dificultadFiltro === '' || receta.dificultad.includes(dificultadFiltro)) &&
+        ){
             const fila = document.createElement('tr');
             fila.innerHTML = `
                 <td>${receta.nombre}</td>
@@ -168,14 +168,12 @@ function filtrarReceta() {
 
 
 document.getElementById('search-bar').addEventListener('input', filtrarRecetas);
-document.getElementById('filter-status').addEventListener('change', filtrarRecetas);
-document.getElementById('filter-format').addEventListener('change', filtrarRecetas);
-document.getElementById('filter-platform').addEventListener('change', filtrarRecetas);
+document.getElementById('filter-category').addEventListener('change', filtrarRecetas);
+document.getElementById('filter-difficulty-level').addEventListener('change', filtrarRecetas);
 
 
 
-
-// Inicialización de la lista y manejo de estrellas
+// Inicialización de la lista
 document.addEventListener('DOMContentLoaded', () => {
-    mostrarRecursos();
+    mostrarRecetas();
 });

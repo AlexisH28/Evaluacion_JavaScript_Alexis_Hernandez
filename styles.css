@@ -12,6 +12,8 @@ body {
     color: #ffffff;
     margin: 0;
     padding: 0;
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -23,6 +25,7 @@ body {
     backdrop-filter: blur(10px);
     padding: 20px;
     background: rgba(0, 0, 0, 0.6);
+
 }
 
 h1 {
@@ -61,8 +64,8 @@ h1 {
 }
 
 .btn-primary:hover {
-    background-color: #ed64a6;
-    border-color: #ed64a6;
+    background-color: #6b5a62;
+    border-color: #6b5a62;
     transform: scale(1.05);
 }
 
